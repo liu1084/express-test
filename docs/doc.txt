@@ -1,0 +1,4 @@
+http://yijiebuyi.com/blog/90c1381bfe0efb94cf9df932147552be.html
+http://www.expressjs.com.cn/starter/generator.html
+
+https://github.com/expressjs/express/blob/master/examples/mvc/controllers/user/index.js
