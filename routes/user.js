@@ -17,6 +17,15 @@ app.get('/', function (req, res) {
 	});
 });
 
+app.get('/counter', function(req, res){
+	db.user.count(function(error, count){
+		if (error) {
+			throw new Error(error);
+		}
+		res.send({count: count});
+	});
+});
+
 //根据email和name取得集合中的doc
 app.get('/email/:email/name/:name', function (req, res) {
 	var email = req.params.email;
@@ -56,6 +65,17 @@ app.put('/', function (req, res) {
 
 	var body = req.body;
 	db.user.update(options, {$set: {name: body.name}}, function (error, result) {
+		if (error) {
+			throw new Error(error);
+		}
+		res.send(result);
+	});
+});
+
+//根据email删除一个doc
+app.delete('/email/:email', function(req, res, next){
+	var email = req.params.email;
+	db.user.remove({email: {$eq: email}}, function(error, result){
 		if (error) {
 			throw new Error(error);
 		}

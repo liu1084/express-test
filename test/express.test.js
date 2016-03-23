@@ -1,11 +1,35 @@
 /**
  * Created by neusoft on 2016/3/23.
  */
-var expect = require('expect');
+var expect = require('chai').expect;
 var superAgent = require('superagent');
+var db = require('../common/db/db.config').db;
 var url = 'http://localhost:3000';
 describe('express rest api server', function(){
 	it('retrives a collection', function(done){
+		var userCollection = db.collection('user');
+		expect(userCollection).to.be.an('object');
+		done();
+	});
+
+	it('remove all data from user', function(done){
+		db.bind('user');
+		db.user.remove({}, function(error, result){
+			expect(error).to.be.equal(null);
+			console.log(result);
+			done();
+		});
+	});
+
+	it('count object', function(done){
+		var path = '/user/counter';
+		superAgent.get(url + path)
+			.send()
+			.end(function(error, result){
+				expect(error).to.be.equal(null);
+				console.log(result);
+				//expect(result.count).to.be.equal(0);
+			});
 		done();
 	});
 
@@ -17,24 +41,28 @@ describe('express rest api server', function(){
 				email: 'lee0915@163.com'
 			})
 			.end(function(error, result){
-				expect(error).to.eql(null);
-				expect(result.body.length).to.eql(1);
-				var _id = result.body[0]._id;
-				expect(_id.length).to.eql(24);
-				id = _id;
+				expect(error).to.be.equal(null);
+				console.log(result);
+				expect(result.body.result.ok).to.be.equal(1);
+				expect(result.body.insertedCount).to.be.equal(1);
+				id = result.body.insertedIds;
 				done();
 			});
 	});
 
+	it('count object', function(done){
+		var path = '/user/counter';
+		superAgent.get(url + path)
+			.send()
+			.end(function(error, result){
+				expect(error).to.be.eq(null);
+
+			});
+		done();
+	});
+
 	it('retrives an object', function(done){
 		var path = '/user';
-		superAgent.get(url + path + '/' + id)
-			.end(function(error, result){
-				expect(error.length.to.eql(0));
-				expect()
-				expect(result.body[0].length.to.eql(1));
-				expect(result.body[0]._id = id);
-			});
 		done();
 	});
 
